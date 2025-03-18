@@ -1,0 +1,8 @@
+Collider name: EIC_Gold
+Initial lepton: e
+Lepton energy: 18
+Nucleus name: Gold
+A: 197
+Z: 79
+M: 183
+Nucleus energy: 21670

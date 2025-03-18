@@ -1,0 +1,4 @@
+lepton_nucleus_collisions/data/E137.h5 filter=lfs diff=lfs merge=lfs -text
+lepton_nucleus_collisions/data/EIC_Gold.h5 filter=lfs diff=lfs merge=lfs -text
+lepton_nucleus_collisions/data/MuCol.h5 filter=lfs diff=lfs merge=lfs -text
+lepton_nucleus_collisions/data/MuSIC.h5 filter=lfs diff=lfs merge=lfs -text

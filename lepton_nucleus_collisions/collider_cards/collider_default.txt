@@ -1,0 +1,21 @@
+-------- Fill in to describe collider -------
+
+Collider name: 
+Initial lepton: 
+Lepton energy: 
+
+Nucleus name: 
+A: 
+Z: 
+M: 
+Nucleus energy:
+Photon transfer cut-off: 1
+#To modify form factor, must edit file.
+
+# If initial-state nucleus energy is the same as M, fixed-target is assumed.
+# Otherwise, it is assumed the ion is stripped.
+
+
+
+
+

@@ -1,0 +1,9 @@
+-------- Fill in to describe run -------
+
+Run name:
+Collider card:
+Final lepton:
+Particle type:
+t_cut_off:
+method:
+Particle mass:

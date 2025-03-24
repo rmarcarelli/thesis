@@ -1,0 +1,162 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+
+"""
+ALL limits can be computed in this file, assuming the data was properly generated...
+
+These limits are valid for any leptonically-coupled particle with 
+hierarchy described in matrix form, i.e.
+
+            | gee   gem   get |
+      gll = | gme   gmm   gmt |
+            | gte   gtm   gtt |
+
+The only thing that matters here is the ratio of the couplings. Then, one .
+
+If index is unspecified... just picks the largest coupling.
+
+Alternatively, one could cast limits on a coupling gij with all other couplings
+fixed or zero (i.e., one can consider constraint on "get" when gll = 1e-3 for all
+diagonal couplings, and all other off-diagonal couplings are zero). The hierarchy
+approach is slightly easier to implement, because the branching-fractions depends
+only on the hierarchy so is independent of the over-all size of the couplings.This
+still allows one to set certain couplings to zero, and impose hierarchies between
+e.g. diagonal and off-diagonal components. 
+"""
+
+import numpy as np
+from lfv_lepton_observables.formulae.decay_rates import radiative_decay_rate, trilepton_decay_rate
+from lfv_lepton_observables.formulae.dipole_moments import magnetic_dipole_moment_contribution, electric_dipole_moment_contribution
+
+"""
+----- Limits from lepton dipole moments ---
+
+"""
+
+lepton_widths = np.array([np.inf, 2.99e-19, 2.27e-12])
+radiative_processes = [(1, 0), (2, 0), (2, 1)]
+#90% limits
+radiative_decay_branching_limits = radiative_decay_BR_limits = {(1, 0): 4.2e-13, #from MEG ()
+                                                                (2, 0): 3.3e-8,  #from BaBar ()
+                                                                (2, 1): 4.4e-8,  #from BaBar ()
+                                                                }
+
+def radiative_decay_limit(m, process, idx, g = None, th = [[0]*3]*3, d = [[0]*3]*3, ph = [[0]*3]*3,  mode = None, ALP = False, Lam = 1000):
+    _i, _j, _k, _l = idx
+    if g is None:
+        g = np.zeros((3, 3))
+        g[_i][_j] = 1
+        g[_j][_i] = 1
+        g[_k][_l] = 1
+        g[_l][_k] = 1
+    normalized_rate = radiative_decay_rate(m, *process, g, th, d, ph, mode, ALP, Lam)/(g[_i][_j]*g[_k][_l])**2 + 1e-64
+    rate_limit = lepton_widths[process[0]] * radiative_decay_branching_limits[process]
+
+    return (rate_limit/normalized_rate)**(1/4)
+
+
+trilepton_processes = [(1, 0, 0, 0), #\mu \rightarrow 3e
+                       (2, 0, 0, 0), #\tau \rightarrow 3e
+                       (2, 0, 0, 1), #\tau \rightarrow e e \bar{\mu}
+                       (2, 0, 1, 0), #\tau \rightarrow e \mu \bar{e}
+                       (2, 1, 1, 0), #\tau \rightarrow \mu \mu \bar{e} 
+                       (2, 0, 1, 1), #\tau \rightarrow e \mu \bar{\mu}
+                       (2, 1, 1, 1) #\tau \rightarrow 3\mu
+                      ]
+
+#90% limits                -  -  -  +
+trilepton_decay_limits = {(1, 0, 0, 0): 1.0e-12, # ()
+                          (2, 0, 0, 0): 2.7e-8, # ()
+                          (2, 0, 0, 1): 1.8e-8, # ()
+                          (2, 0, 1, 0): 1.8e-8, # ()
+                          (2, 1, 1, 0): 1.7e-8, # ()
+                          (2, 0, 1, 1): 1.7e-8, # ()
+                          (2, 1, 1, 1): 2.1e-8 # ()
+                         }
+
+def trilepton_decay_limit(m, process, idx, g = None, th = [[0]*3]*3, d = [[0]*3]*3, ph = [[0]*3]*3,  mode = None, ALP = False, Lam = 1000):
+    _i, _j, _k, _l = idx
+    if g is None:
+        g = np.zeros((3, 3))
+        g[_i][_j] = 1
+        g[_j][_i] = 1
+        g[_k][_l] = 1
+        g[_l][_k] = 1
+        
+    normalized_rate = trilepton_decay_rate(m, *process, g, th, d, ph, mode, ALP, Lam)/(g[_i][_j]*g[_k][_l])**2 + 1e-64
+    rate_limit = lepton_widths[process[0]] * trilepton_decay_limits[process]
+    
+    return (rate_limit/normalized_rate)**(1/4)
+
+
+"""
+----- Limits from lepton dipole moments ---
+
+"""
+
+#EDM AND MDM LIMITS
+anomalies = {'e Rb': (34e-14, 16e-14),
+             'e Cs': (-101e-14, 27e-14),
+             'mu': (249e-11, 48e-11)}
+
+
+MDM_exp_error = [13e-14, #e (average of Rb and Cs)
+                 40e-11, #mu
+                 3.2e-3  #tau
+                 ]
+
+#90% limits
+EDM_limits = [4.1e-30,
+              1.8e-19,
+              1.85e-17]
+
+
+def magnetic_dipole_moment_limit(m, i, idx, g = None, th = [[0]*3]*3, d = [[0]*3]*3, ph = [[0]*3]*3,  mode = None, ALP = False, Lam = 1000):
+    _i, _j = idx
+    if g is None:
+        g = np.zeros((3, 3))
+        g[_i][_j] = 1
+        g[_j][_i] = 1
+        
+    da = magnetic_dipole_moment_contribution(m, i, g, th, d, ph, mode, ALP, Lam)
+    
+    return np.sqrt(np.abs(2*MDM_exp_error[i]/da))
+
+def electric_dipole_moment_limit(m, i, idx, g = None, th = [[0]*3]*3, d = [[0]*3]*3, ph = [[0]*3]*3,  mode = 'max CPV', ALP = False, Lam = 1000):
+    _i, _j = idx
+    if g is None:
+        g = np.zeros((3, 3))
+        g[_i][_j] = 1
+        g[_j][_i] = 1
+        
+    EDM = electric_dipole_moment_contribution(m, i, g, th, d, ph, mode, ALP, Lam)
+    
+    return np.sqrt(np.abs(EDM_limits[i]/EDM))
+
+
+#EXPLANATIONS TO G-2
+def g_2_explanation(m, which_anomaly, idx, nsig = 2, g = None, th = [[0]*3]*3, d = [[0]*3]*3, ph = [[0]*3]*3,  mode = None, ALP = False, Lam = 1000):
+    assert which_anomaly in ['e Rb', 'e Cs', 'mu']
+    anomaly, sig = anomalies[which_anomaly]
+
+    if which_anomaly[0] == 'e':
+        i = 0
+    else:
+        i = 1
+
+    _i, _j = idx
+    if g is None:
+        g = np.zeros((3, 3))
+        g[_i][_j] = 1
+        g[_j][_i] = 1
+        
+    da = magnetic_dipole_moment_contribution(m, i, g, th, d, ph, mode, ALP, Lam)
+
+    if anomaly > 0:
+        return np.sqrt((anomaly - nsig * sig)/ da), np.sqrt((anomaly + nsig * sig)/ da)
+    else:
+        return np.sqrt((anomaly + nsig * sig)/ da), np.sqrt((anomaly - nsig * sig)/ da)
+        
+        
+

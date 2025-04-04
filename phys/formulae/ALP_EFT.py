@@ -7,6 +7,33 @@ from phys.constants import alpha, ml, mH, vH
 
 
 #-------------------------------------------------------------------------#
+# Scalar Decays
+#-------------------------------------------------------------------------#
+
+#specialized to leptons by default
+def scalar_decay_rate(m_phi, mf = ml, g = [[1]*3]*3):
+    
+    rate = 0
+    for i, gi in enumerate(g):
+        for j, gij in enumerate(gi):
+            rate += scalar_fermion_decay_rate(m_phi, mf[i], mf[j], gij)
+
+    return rate
+
+
+def scalar_fermion_decay_rate(m_phi, mi, mj, gij = 1):
+    
+    rate = gij**2/(8*np.pi*m_phi**3)
+    rate*= (m_phi**2 - (mi-mj)**2)**(3/2)
+    rate*= (m_phi**2 - (mi+mj)**2)**(1/2)
+    
+    return np.where(m_phi < mi+mj, 0, rate)
+
+def scalar_fermion_branching_fraction(m_phi, i, j, mf = ml, g = [[1]*3]*3):
+    
+    return scalar_fermion_decay_rate(m_phi, i, j, mf = mf, g = g)/scalar_decay_rate(m_phi, mf = mf, g = g)
+
+#-------------------------------------------------------------------------#
 # ALP Decays
 #-------------------------------------------------------------------------#
 
@@ -36,7 +63,7 @@ def B1(t):
 def ALP_photon_decay_rate(ma, mf = ml, Cff =  [[1]*3]*3, Cgg = 0, Lam = 1000):
     
     Cgg_eff = Cgg
-    for i in range(3):
+    for i in range(len(mf)):
         Cgg_eff += Cff[i][i]/(8*np.pi**2) * B1(4*mf[i]**2/ma**2)
 
     return 4*np.pi * alpha**2 * ma**3 /Lam**2 * np.abs(Cgg_eff)**2

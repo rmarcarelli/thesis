@@ -9,6 +9,7 @@ hc_cmGeV = 1.973e-14 #hbar c = 1.973e-14 cm GeV
 hc_fmGeV = 0.1973 #hbar c = 0.1973 fm GeV
 
 hc2_fbGeV2 = 3.894e11 #(hbar c)^2 = 3.894e11 fb GeV^2
+cm2_fb = 1e39
 
 #physics constants
 e = 0.3028

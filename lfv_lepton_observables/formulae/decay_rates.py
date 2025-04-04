@@ -51,6 +51,8 @@ def radiative_decay_rate(m, i, j, g = [[1]*3]*3, th = [[0]*3]*3, d = [[0]*3]*3, 
 
 def F2(m, i, j, g = [[1]*3]*3, th = [[0]*3]*3, d = [[0]*3]*3, ph = [[0]*3]*3, ALP = False, Lam = 1000):
     
+    m = np.complex128(m)
+    
     f2 = 0
     
     if ALP:
@@ -64,6 +66,8 @@ def F2(m, i, j, g = [[1]*3]*3, th = [[0]*3]*3, d = [[0]*3]*3, ph = [[0]*3]*3, AL
 
 def F3(m, i, j, g = [[1]*3]*3, th = [[0]*3]*3, d = [[0]*3]*3, ph = [[0]*3]*3, ALP = False, Lam = 1000):
 
+    m = np.complex128(m)
+    
     f3 = 0
     
     if ALP:

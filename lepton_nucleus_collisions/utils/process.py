@@ -77,8 +77,8 @@ def process_collider_card(collider_card, var = None):
     initial_state_data = (lepton, E_lepton, Z, A, M, form_factor_squared, E_nuc, v_nuc, E)
     
     var_dict = {'collider': collider_name,
-                'lepton': lepton,
-                'E_lepton': E_lepton,
+                'li': lepton,
+                'Ei': E_lepton,
                 'Z': Z,
                 'A': A,
                 'M': M,
@@ -121,7 +121,7 @@ def process_run_card(run_card, var = None):
     
     var_dict = {'collider': collider_name,
                 'li': initial_lepton,
-                'E_lepton': E_lepton,
+                'Ei': E_lepton,
                 'Z': Z,
                 'A': A,
                 'M': M,
@@ -153,30 +153,30 @@ def lepton_idx(lepton):
 
 #cross-section processing
 
-def process_dcrossx(A, B, DSIG_DA_DB):
-    DSIG_DA = np.trapz(DSIG_DA_DB, x = B, axis = 1)
-    DSIG_DB = np.trapz(DSIG_DA_DB, x = A, axis = 0)
-    SIG = np.trapz(DSIG_DA, x = A)
+def process_dcrossx(X, Y, DSIG_DX_DY):
+    DSIG_DX = np.trapz(DSIG_DX_DY, x = Y, axis = 1)
+    DSIG_DY = np.trapz(DSIG_DX_DY, x = X, axis = 0)
+    SIG = np.trapz(DSIG_DX, x = X)
 
-    crossx_data = np.empty((len(A) + 2, len(B) + 2))
-    crossx_data[1:-1,0] = A
-    crossx_data[0,1:-1] = B
-    crossx_data[1:-1,1:-1] = DSIG_DA_DB
-    crossx_data[1:-1, -1] = DSIG_DA
-    crossx_data[-1, 1:-1] = DSIG_DB
+    crossx_data = np.empty((len(X) + 2, len(Y) + 2))
+    crossx_data[1:-1,0] = X
+    crossx_data[0,1:-1] = Y
+    crossx_data[1:-1,1:-1] = DSIG_DX_DY
+    crossx_data[1:-1, -1] = DSIG_DX
+    crossx_data[-1, 1:-1] = DSIG_DY
     crossx_data[-1, -1] = SIG
     
     return crossx_data
     
 def read_dcrossx(dcrossx_data):
-    A = dcrossx_data[1:-1, 0]
-    B = dcrossx_data[0,1:-1]
-    DSIG_DA_DB = dcrossx_data[1:-1,1:-1]
-    DSIG_DA = dcrossx_data[1:-1, -1]
-    DSIG_DB = dcrossx_data[-1, 1:-1]
+    X = dcrossx_data[1:-1, 0]
+    Y = dcrossx_data[0,1:-1]
+    DSIG_DX_DY = dcrossx_data[1:-1,1:-1]
+    DSIG_DX = dcrossx_data[1:-1, -1]
+    DSIG_DY = dcrossx_data[-1, 1:-1]
     SIG = dcrossx_data[-1, -1]
     
-    return A, B, DSIG_DA_DB, DSIG_DA, DSIG_DB, SIG   
+    return X, Y, DSIG_DX_DY, DSIG_DX, DSIG_DY, SIG   
     
 def save_dcrossx(file_name, crossx_data, params):
     

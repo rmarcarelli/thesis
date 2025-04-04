@@ -3,7 +3,6 @@
 
 
 """
-ALL limits can be computed in this file, assuming the data was properly generated...
 
 These limits are valid for any leptonically-coupled particle with 
 hierarchy described in matrix form, i.e.
@@ -23,6 +22,7 @@ approach is slightly easier to implement, because the branching-fractions depend
 only on the hierarchy so is independent of the over-all size of the couplings.This
 still allows one to set certain couplings to zero, and impose hierarchies between
 e.g. diagonal and off-diagonal components. 
+
 """
 
 import numpy as np
@@ -65,14 +65,15 @@ trilepton_processes = [(1, 0, 0, 0), #\mu \rightarrow 3e
                        (2, 1, 1, 1) #\tau \rightarrow 3\mu
                       ]
 
-#90% limits                -  -  -  +
-trilepton_decay_limits = {(1, 0, 0, 0): 1.0e-12, # ()
-                          (2, 0, 0, 0): 2.7e-8, # ()
-                          (2, 0, 0, 1): 1.8e-8, # ()
-                          (2, 0, 1, 0): 1.8e-8, # ()
-                          (2, 1, 1, 0): 1.7e-8, # ()
-                          (2, 0, 1, 1): 1.7e-8, # ()
-                          (2, 1, 1, 1): 2.1e-8 # ()
+#90% limits
+#                          -  -  -  +
+trilepton_decay_limits = {(1, 0, 0, 0): 1.0e-12, # (SINDRUM, http://doi.org/10.1016/0550-3213(88)90462-2)
+                          (2, 0, 0, 0): 2.7e-8, # (Belle, https://doi.org/10.1016/j.physletb.2010.03.037)
+                          (2, 0, 0, 1): 1.5e-8, # (Belle, https://doi.org/10.1016/j.physletb.2010.03.037)
+                          (2, 0, 1, 0): 1.8e-8, # (Belle, https://doi.org/10.1016/j.physletb.2010.03.037)
+                          (2, 1, 1, 0): 1.7e-8, # (Belle, https://doi.org/10.1016/j.physletb.2010.03.037)
+                          (2, 0, 1, 1): 2.7e-8, # (Belle, https://doi.org/10.1016/j.physletb.2010.03.037)
+                          (2, 1, 1, 1): 2.1e-8  # (Belle, https://doi.org/10.1016/j.physletb.2010.03.037)
                          }
 
 def trilepton_decay_limit(m, process, idx, g = None, th = [[0]*3]*3, d = [[0]*3]*3, ph = [[0]*3]*3,  mode = None, ALP = False, Lam = 1000):
@@ -119,7 +120,7 @@ def magnetic_dipole_moment_limit(m, i, idx, g = None, th = [[0]*3]*3, d = [[0]*3
         g[_i][_j] = 1
         g[_j][_i] = 1
         
-    da = magnetic_dipole_moment_contribution(m, i, g, th, d, ph, mode, ALP, Lam)
+    da = magnetic_dipole_moment_contribution(m, i, g, th, d, ph, mode, ALP, Lam)/g[_i][_j]**2 + 1e-64
     
     return np.sqrt(np.abs(2*MDM_exp_error[i]/da))
 

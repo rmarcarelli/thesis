@@ -84,6 +84,8 @@ def electric_dipole_moment_contribution(m, i, g = [[1]*3]*3, th = [[0]*3]*3, d =
 
 def F2(m, i, g = [[1]*3]*3, th = [[0]*3]*3, d = [[0]*3]*3, ph = [[0]*3]*3, ALP = False, Lam = 1000):
 
+    m = np.complex128(m)
+    
     f2 = 0
     if ALP:
         f2 += F2_ALP_photon(m, i, g, Lam  = Lam)
@@ -95,6 +97,8 @@ def F2(m, i, g = [[1]*3]*3, th = [[0]*3]*3, d = [[0]*3]*3, ph = [[0]*3]*3, ALP =
     return f2
 
 def F3(m, i, g = [[1]*3]*3, th = [[0]*3]*3, d = [[0]*3]*3, ph = [[0]*3]*3, ALP = False, Lam = 1000):
+    
+    m = np.complex128(m)
     
     if ALP:
         g, th, d, ph = ALP_to_scalar(g, th, d, ph)

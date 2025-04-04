@@ -16,6 +16,8 @@ from scipy.special import gammaln
 def logP(n_observed, mean, background):
     return n_observed*np.log(mean+background + 1e-16) - (mean+background) - gammaln(n_observed+1)
 
+#Would be nice to update to work for arbitrary background. Right now, works up to ~ 5000.
+
 def find_n_interval(CL, mean, background):
     if CL > 1:
         CL = CL/100
@@ -41,7 +43,7 @@ def poisson_confidence_interval(CL, n_observed, background, tol = 0.01):
     lower_mean_min = 0
     lower_mean_max = lower_mean
     while np.abs(lower_mean_max - lower_mean_min) > tol/2:
-        lower, upper = find_n_interval(CL, background, lower_mean)
+        lower, upper = find_n_interval(CL, lower_mean, background)
         
         if lower <= n_observed and upper >= n_observed:
             lower_mean_max = lower_mean
@@ -51,10 +53,10 @@ def poisson_confidence_interval(CL, n_observed, background, tol = 0.01):
             lower_mean = (lower_mean_max + lower_mean)/2
 
     upper_mean_min = upper_mean
-    upper_mean_max = 1000 #just a big number
+    upper_mean_max = 2000 #just a big number
     
     while np.abs(upper_mean_max - upper_mean_min) > tol/2:
-        lower, upper = find_n_interval(CL, background, upper_mean)
+        lower, upper = find_n_interval(CL, upper_mean, background)
         
         if lower <= n_observed and upper >= n_observed:
             upper_mean_min = upper_mean

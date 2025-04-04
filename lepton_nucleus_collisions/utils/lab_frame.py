@@ -23,7 +23,7 @@ def lab_frame_distributions(run, params, gamma, eta, save_axes = (0, 1), which =
     J_E = m
     
     #reshape for broadcasting
-    E_lab = E_lab.reshape(-1, 1)
+    E_lab = E_lab.reshape(-1, 1) 
     th_lab = th_lab.reshape(1, -1) 
 
     Ek, THk = E_THETA_lab_transform(m, v_nuc, E_lab, th_lab) #convert to frame of nucleus

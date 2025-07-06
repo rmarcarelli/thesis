@@ -1,8 +1,0 @@
-Collider name: MuCol
-Initial lepton: mu
-Lepton energy: 1000
-Nucleus name: Lead
-A: 208
-Z: 82
-M: 193
-Nucleus energy: 193

@@ -2,19 +2,17 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-from skimage import measure
 
-#from phys.formulae.ALP_EFT import ALP_decay_rate, ALP_fermion_decay_rate, Higgs_ALP_decay_rate
 from phys.constants import crossx_H_prod
-from phys.utils import poisson_confidence_interval
+from phys.utils import poisson_confidence_interval, find_contours
 from lfv_higgs_decays.fits.displaced_fits import ATLAS_fit, MATH_fit
-from lfv_higgs_decays.formulae.higgs_decay_signals import (Cij_to_ta,
-                                                           BR_H_X_to_Cah,
-                                                           H_to_OSSF0_signal_efficiency,
-                                                           BR_aa_OSSF0,
-                                                           f_detect,
-                                                           BR_aa_jets
-                                                           )
+from lfv_higgs_decays.compute.higgs_decay_signals import (Cij_to_ta,
+                                                          BR_H_X_to_Cah,
+                                                          H_to_OSSF0_signal_efficiency,
+                                                          BR_aa_OSSF0,
+                                                          f_detect,
+                                                          BR_aa_jets
+                                                          )
 #-------------------------------------------------------------------------#
 # For CMS analysis
 #-------------------------------------------------------------------------#
@@ -91,19 +89,6 @@ def Cah_limit_MATH(ma, ta, Cah= None, which = 'Cah', Cll = [[1]*3]*3, Cgg = 0, L
 #-------------------------------------------------------------------------#
 # Limits on Cll
 #-------------------------------------------------------------------------#
-
-#Move elsewhere?
-def find_contours(x, y, Z, Z_val = 1):
-    contours = measure.find_contours(Z, Z_val)
-
-    boundary_pts = []
-    for cont in contours:
-        i, j = cont.T[0], cont.T[1]  # Extract row/col indices
-        x_coords = np.interp(i, np.arange(len(x)), x)  # Map cols to x
-        y_coords = np.interp(j, np.arange(len(y)), y)  # Map rows to y
-        boundary_pts.append(np.column_stack((x_coords, y_coords)).T)
-
-    return boundary_pts
 
 detectors = {'CMS': Cah_limit_CMS,
              'ATLAS': Cah_limit_ATLAS,

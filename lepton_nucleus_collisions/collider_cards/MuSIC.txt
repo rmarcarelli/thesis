@@ -1,8 +1,0 @@
-Collider name: MuSIC
-Initial lepton: mu
-Lepton energy: 1000
-Nucleus name: Gold
-A: 197
-Z: 79
-M: 183
-Nucleus energy: 21670

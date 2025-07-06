@@ -4,14 +4,33 @@
 import numpy as np
 
 from phys.utils import poisson_confidence_interval
-from phys.formulae.scalar_ALP_EFT import ALP_to_scalar, scalar_fermion_branching_fraction
-from phys.constants import cm2_fb, ml, me, mm, mt
-from lepton_nucleus_collisions.utils.process import process_run_card
-from lepton_nucleus_collisions.process_crossx_data import crossx, dcrossx, distribution
+from phys.scalar_ALP_EFT import ALP_to_scalar, scalar_fermion_branching_fraction
+from phys.constants import cm2_fb, mm, mt
+from lepton_nucleus_collisions.experiments import EIC, MuSIC, MuBeD, FinalState
+from lepton_nucleus_collisions.compute.transformations import TRANSFORM
 
+def default_kernel(experiment, final_state, eta_min = -np.inf, eta_max = np.inf, gamma_min = 1.0, gamma_max = np.inf, particle = 'boson'):
+    
+    def kernel(experiment, final_state, x, y, x_var = 'log_gamma', y_var = 'eta'):
+        
+        in_context = {'experiment': experiment,
+                      'final_state': final_state,
+                      'frame': 'ion',
+                      'particle': 'boson'}
+        out_context = {'experiment': experiment,
+                      'final_state': final_state,
+                      'frame': 'lab',
+                      'particle': particle}
+
+        gamma, eta = TRANSFORM(x, y, x_in = x_var, y_in = y_var, x_out = 'gamma', in_context = in_context, out_context = out_context, include_jacobian = False)
+        
+        return (eta > eta_min)*(eta < eta_max)*(gamma > gamma_min)*(gamma < gamma_max)
+    
+    return kernel
+    
 
 def EIC_limit(masses,
-              electron_loss_rate = 1e-3,
+              electron_loss_rate = 1e-2,
               electron_positron_misID_rate = 1e-3,
               tau_efficiency = 1e-2,
               idx = (0, 2), #constraining g_{e \tau}
@@ -20,10 +39,11 @@ def EIC_limit(masses,
               ALP = True,
               Lam = 1000,
               L = 100,
-              CL = 0.9):
-    
-    
-    #How about a --> e^+ \mu^- or a --> mu^+ e^-
+              eta_min = -3.5,
+              eta_max = 3.5,
+              CL = 0.9,
+              method = 'exact',
+              interpolate_mass = True):
     
     if ALP:
         #don't concern ourselves with the angles...
@@ -33,15 +53,16 @@ def EIC_limit(masses,
     else:
         G = g
 
-    A, masses_from_file = process_run_card('EIC_Gold.txt', ['A', 'masses'])
-    L_nuc = L/A
-    crossx_from_file = crossx('EIC_Gold',
-                              ('tau', 'scalar', 1.0, 'exact', False),
-                              units = 'fb',
-                              Y_min = -3.5,
-                              Y_max = 3.5) * G[0][2]**2   
+    A = EIC.A
     
-    crossx_signal = np.interp(masses, masses_from_file, crossx_from_file)
+    L_nuc = L/A
+    final_states = [FinalState(method, 0.01, 'tau', 'scalar', mass, PV_angle = th[0][2]) for mass in masses]
+    crossx_signal = np.array([EIC.cross_section(final_state,
+                                                kernel = default_kernel(EIC, final_state, eta_min = eta_min, eta_max = eta_max),
+                                                units = 'fb',
+                                                g = G[0][2],
+                                                interpolate_mass = interpolate_mass) for final_state in final_states])
+
     
     r_te = 0.1782
     background_efficiency = electron_positron_misID_rate * (2 - r_te)
@@ -49,19 +70,20 @@ def EIC_limit(masses,
     background_efficiency*= tau_efficiency
     
 
-    crossx_BG = 2.6e4*1000 #from ... 
+    crossx_BG = 2.6e4*1000 # from ... 
     N_BG = background_efficiency * crossx_BG * L_nuc #
     
     B_te = scalar_fermion_branching_fraction(masses, 0, 2, g = G, th = th)
     B_tt = scalar_fermion_branching_fraction(masses, 2, 2, g = G, th = th)
 
     signal_efficiency = 2*tau_efficiency*(1-r_te)*(B_te + r_te * B_tt)
-    
+
     N_events_normalized = signal_efficiency * crossx_signal * L_nuc / g[idx[0]][idx[1]]**2
     
     n_max = poisson_confidence_interval(CL, N_BG, N_BG)[1]
-    
-    return np.sqrt(n_max/N_events_normalized)
+
+    limit = np.sqrt(n_max/N_events_normalized)
+    return np.where(np.isfinite(limit), limit, 1e16)
 
 def MuSIC_limit(masses,
                 muon_loss_rate = 1e-3,
@@ -72,8 +94,12 @@ def MuSIC_limit(masses,
                 th = [[0]*3]*3,
                 ALP = True,
                 Lam = 1000,
-                L = 100, 
-                CL = 0.9):
+                L = 100,
+                eta_min = -6.0,
+                eta_max = 6.0,
+                CL = 0.9, 
+                method = 'exact',
+                interpolate_mass = True):
     
     if ALP:
         #don't concern ourselves with the angles...
@@ -83,16 +109,15 @@ def MuSIC_limit(masses,
     else:
         G = g
 
-    A, masses_from_file = process_run_card('MuSIC.txt', ['A', 'masses'])
+    A = MuSIC.A
     L_nuc = L/A
-    crossx_from_file = crossx('MuSIC',
-                              ('tau', 'scalar', 1.0, 'exact', False),
-                              units = 'fb',
-                              Y_min = -6,
-                              Y_max = 6) * G[1][2]**2   
-    
-    crossx_signal = np.interp(masses, masses_from_file, crossx_from_file)
-    
+    final_states = [FinalState(method, 0.01, 'tau', 'scalar', mass, PV_angle = th[1][2]) for mass in masses]
+    crossx_signal = np.array([MuSIC.cross_section(final_state,
+                                                  kernel = default_kernel(MuSIC, final_state, eta_min = eta_min, eta_max = eta_max),
+                                                  units = 'fb',
+                                                  g = G[1][2],
+                                                  interpolate_mass =interpolate_mass) for final_state in final_states])
+        
     r_tm = 0.1739
     background_efficiency = muon_antimuon_misID_rate * (2 - r_tm)
     background_efficiency+= muon_loss_rate * r_tm
@@ -110,19 +135,22 @@ def MuSIC_limit(masses,
     
     n_max = poisson_confidence_interval(CL, N_BG, N_BG)[1]
     
-    return np.sqrt(n_max/N_events_normalized)
+    limit = np.sqrt(n_max/N_events_normalized)
+    return np.where(np.isfinite(limit), limit, 1e16)
 
 def MuBeD_limit(masses,
                 target_length = 2, #cm
                 tau_efficiency = 0.15, #3-prong decays only
-                track_resolution = 0.2, #cm
+                track_resolution = 2, #cm
                 N_MOT = 1e16,
                 idx = (1, 2), #which coupling is being constrained
                 g = [[1]*3]*3,
                 th = [[0]*3]*3,
                 ALP = True,
                 Lam = 1000,
-                CL = 0.9):
+                CL = 0.9,
+                method = 'exact',
+                interpolate_mass = True):
     
     if ALP:
         #don't concern ourselves with the angles...
@@ -132,13 +160,13 @@ def MuBeD_limit(masses,
     else:
         G = g
         
-    M, masses_from_file = process_run_card('MuCol.txt', ['M', 'masses'])
-    crossx_from_file = crossx('MuCol',
-                              ('tau', 'scalar', 1.0, 'exact', False),
-                              units = 'fb') * G[1][2]**2   
-    
-    crossx_tot = np.interp(masses, masses_from_file, crossx_from_file)
-    
+    M = MuBeD.M
+    final_states = [FinalState(method, 1.0, 'tau', 'scalar', mass, PV_angle = th[1][2]) for mass in masses]
+    crossx_tot = np.array([MuBeD.cross_section(final_state,
+                                               units = 'fb',
+                                               g = G[1][2],
+                                               interpolate_mass = interpolate_mass) for final_state in final_states])
+        
     
     # For MuBeD, we assume there is a "target_length" cm thick chunk of led,
     # interlaced with emulsion detectors with the ability to detect taus with 
@@ -155,21 +183,23 @@ def MuBeD_limit(masses,
     lead_density = 6.4e24 #GeV/cm^3
     
     #Luminosity (assuming the particle decays promptly)
-    L = N_MOT * lead_density/M / cm2_fb #fb^-1
+    L = N_MOT * lead_density*  target_length/M / cm2_fb #fb^-1
+    # [GeV/cm^3] [cm]/[GeV]
 
     c = 3e10 #cm/s
     tau_lifetime = 2.9e-13 #s
     g_min = track_resolution/(c * tau_lifetime)
+
+    #We require identification of both taus. First, the "converted" tau:    
+    crossx_convert = np.array([MuBeD.cross_section(final_state,
+                                                   kernel = default_kernel(MuBeD, final_state, gamma_min = g_min, particle = 'lepton'),
+                                                   units = 'fb',
+                                                   g = G[1][2],
+                                                   interpolate_mass = interpolate_mass) for final_state in final_states])
+
+     
+    p_convert = crossx_convert / crossx_tot * tau_efficiency
     
-    #We require identification of both taus. First, the "converted" tau:
-    crossx_from_file = crossx('MuCol',
-                              ('tau', 'scalar', 1.0, 'exact', False),
-                              units = 'fb',
-                              X_min = g_min,
-                              final_state_particle = 'lepton') * G[1][2]**2
-    crossx_convert = np.interp(masses, masses_from_file, crossx_from_file)   
-       
-    p_convert = crossx_convert/crossx_tot * tau_efficiency
     
     # Next, the tau which is a decay product from the ALP. For this, we assume 
     # that \gamma_\tau = \gamma_\phi * E_\tau, where E_\tau is the energy imparted
@@ -179,37 +209,45 @@ def MuBeD_limit(masses,
     
     p_decay_tm = []
     p_decay_tt = []
-    for m in masses_from_file:
+    #for m,final_state, crossx in zip(masses, final_states, crossx_tot):
         #\phi -> \mu \tau
-        Et = (m**2 + mt**2 - mm**2)/(2*m)
-        gamma, dist = distribution('MuCol', ('tau', 'scalar', 1.0, 'exact', False, m), which = 'X')
-        dist = np.nan_to_num(dist)
-        g_min_phi = g_min * mt/Et
-        p = np.trapz(dist * (gamma > g_min_phi), x = gamma) #* B_tm * tau_efficiency
-        p_decay_tm.append(p)
-        
-        #\phi -> \tau \tau
-        Et = m**2/(2*m)
-        gamma, dist = distribution('MuCol', ('tau', 'scalar', 1.0, 'exact', False, m), which = 'X')
-        g_min_phi = 2 * g_min * mt/Et #since each tau takes half the energy, multiply by 2
-        B_tt = scalar_fermion_branching_fraction(m, 2, 2, g = G, th = th)
-        #p+= np.trapz(dist*(gamma > g_min_phi), x = gamma) * B_tt * tau_efficiency * 0.1739 # tau^+ -> mu^+
-        p = np.trapz(dist * (gamma > g_min_phi), x = gamma)
-        p_decay_tt.append(p)
+    Et = (masses**2 + mt**2 - mm**2)/(2*masses)
+    g_min_phi = g_min * mt/Et
+
     
-    p_decay_tm = np.interp(masses, masses_from_file, p_decay_tm)
-    p_decay_tt = np.interp(masses, masses_from_file, p_decay_tt)
+    crossx_decay_tm = np.array([MuBeD.cross_section(final_state,
+                                                   kernel = default_kernel(MuBeD, final_state, gamma_min = g_min),
+                                                   units = 'fb',
+                                                   g = G[1][2],
+                                                   interpolate_mass = interpolate_mass) for g_min, final_state in zip(g_min_phi, final_states)])
+
+    p_decay_tm = crossx_decay_tm/crossx_tot
     
+    #\phi -> \tau \tau
+    Et = masses**2/(2*masses)
+    g_min_phi = g_min * mt/Et 
+
+    crossx_decay_tt = np.array([MuBeD.cross_section(final_state,
+                                                   kernel = default_kernel(MuBeD, final_state, gamma_min = g_min),
+                                                   units = 'fb',
+                                                   g = G[1][2],
+                                                   interpolate_mass = interpolate_mass) for g_min, final_state in zip(g_min_phi, final_states)])
+
+    p_decay_tt = crossx_decay_tt/crossx_tot
+    
+    p_decay_tm = np.array(p_decay_tm)
+    p_decay_tt = np.array(p_decay_tt)
+
     B_tm = scalar_fermion_branching_fraction(masses, 1, 2, g = G, th = th)
     B_tt = scalar_fermion_branching_fraction(masses, 2, 2, g = G, th = th)
     r_tm = 0.1739
     
-    p_decay = (p_decay_tm * B_tm  + p_decay_tt * B_tt * r_tm)* tau_efficiency
+    p_decay = (p_decay_tm * B_tm  + p_decay_tt * B_tt * r_tm) * tau_efficiency
             
     N_events_normalized = L * crossx_tot * p_decay * p_convert / g[idx[0]][idx[1]]**2
 
     n_max = poisson_confidence_interval(CL, 0, 0)[1]
     
-
-    return np.sqrt(n_max/N_events_normalized.squeeze()) #zero background, 90% confidence
+    limit = np.sqrt(n_max/N_events_normalized)
+    return np.where(np.isfinite(limit), limit, 1e16)
     

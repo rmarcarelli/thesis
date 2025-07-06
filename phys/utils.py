@@ -2,22 +2,22 @@
 # -*- coding: utf-8 -*-
 
 """
-Just some random useful functions.
+Some useful functions for computing limits and projections in the
+other notebooks in this codebase.
 """
 
 import numpy as np
-from scipy.special import gammaln
 
 #-------------------------------------------------------------------------#
 # A reproduction of the analysis from Feldman and Cousins' "A Unified Approach
 # to the Classical Statistical Analysis of Small Signals" (arxiv/physics/9711021).
 #-------------------------------------------------------------------------#
+from scipy.special import gammaln
 
 def logP(n_observed, mean, background):
     return n_observed*np.log(mean+background + 1e-16) - (mean+background) - gammaln(n_observed+1)
 
 #Would be nice to update to work for arbitrary background. Right now, works up to ~ 5000.
-
 def find_n_interval(CL, mean, background):
     if CL > 1:
         CL = CL/100
@@ -66,3 +66,22 @@ def poisson_confidence_interval(CL, n_observed, background, tol = 0.01):
             upper_mean = (upper_mean_min + upper_mean)/2
 
     return lower_mean, upper_mean
+
+#-------------------------------------------------------------------------#
+# Useful function for finding contours that are more complex than
+# a simple maximum or minimum region.
+#-------------------------------------------------------------------------#
+
+from skimage import measure
+
+def find_contours(x, y, Z, Z_val = 1):
+    contours = measure.find_contours(Z, Z_val)
+
+    boundary_pts = []
+    for cont in contours:
+        i, j = cont.T[0], cont.T[1]  # Extract row/col indices
+        x_coords = np.interp(i, np.arange(len(x)), x)  # Map cols to x
+        y_coords = np.interp(j, np.arange(len(y)), y)  # Map rows to y
+        boundary_pts.append(np.column_stack((x_coords, y_coords)).T)
+
+    return boundary_pts

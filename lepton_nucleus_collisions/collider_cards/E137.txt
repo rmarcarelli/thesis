@@ -1,8 +1,0 @@
-Collider name: E137
-Initial lepton: e
-Lepton energy: 20
-Nucleus name: Aluminum
-A: 26
-Z: 13
-M: 24.2
-Nucleus energy: 24.2

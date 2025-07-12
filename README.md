@@ -1,6 +1,6 @@
 # Lepton Flavor Violation and New Physics Searches
 
-This repository contains the computational framework and analysis code for my PhD thesis on aspects of lepton flavor violation in particle physics.
+This repository contains the computational framework, analysis code, and complete LaTeX document for my PhD thesis on aspects of lepton flavor violation in particle physics.
 
 ## Overview
 
@@ -15,16 +15,44 @@ This thesis explores lepton flavor violating processes and their implications fo
 
 ```
 thesis/
-├── thesis_code/                    # Main computational framework
-│   ├── phys/                      # Physics constants and utilities
-│   ├── lfv_lepton_observables/    # LFV decay rates and dipole moments
-│   ├── lfv_higgs_decays/         # Higgs decay signal calculations
+├── src/                          # LaTeX source files
+│   ├── main.tex                  # Main thesis document
+│   ├── macros.tex                # Custom LaTeX macros
+│   ├── chapters/                 # Chapter files
+│   │   ├── chapter1.tex
+│   │   ├── chapter2.tex
+│   │   ├── chapter3.tex
+│   │   ├── chapter4.tex
+│   │   ├── chapter5.tex
+│   │   ├── chapter6.tex
+│   │   └── chapter7.tex
+│   ├── appendices/               # Appendix files
+│   │   ├── appendixA.tex
+│   │   └── appendixB.tex
+│   ├── styles/                   # LaTeX style files
+│   │   └── thesis.cls
+│   └── bibliography/             # Bibliography
+│       └── refs.bib
+├── figures/                      # Generated plots and figures
+│   ├── chapter1/
+│   ├── chapter2/
+│   ├── chapter3/
+│   ├── chapter4/
+│   ├── chapter5/
+│   ├── chapter6/
+│   └── presentation/
+├── build/                        # Build artifacts (auto-generated)
+├── thesis_code/                  # Main computational framework
+│   ├── phys/                     # Physics constants and utilities
+│   ├── lfv_lepton_observables/   # LFV decay rates and dipole moments
+│   ├── lfv_higgs_decays/        # Higgs decay signal calculations
 │   ├── lepton_nucleus_collisions/ # Cross section calculations
-│   └── displaced_vectors/         # Displaced vertex analyses
-├── notebooks/                     # Jupyter notebooks for analysis
-├── figures/                       # Generated plots and figures
+│   └── displaced_vectors/        # Displaced vertex analyses
+├── notebooks/                    # Jupyter notebooks for analysis
 ├── environment.yml               # Conda environment specification
-└── README.md                     # This file
+├── build.sh                     # Build script for LaTeX compilation
+├── thesis.pdf                   # Compiled thesis (auto-generated)
+└── README.md                    # This file
 ```
 
 ## Installation
@@ -33,6 +61,7 @@ thesis/
 
 - Python 3.8 or higher
 - Conda or Miniconda
+- LaTeX distribution (TeX Live or MiKTeX)
 
 ### Setup
 
@@ -54,6 +83,25 @@ pip install -e .
 ```
 
 ## Usage
+
+### Building the Thesis
+
+To compile the LaTeX thesis:
+
+```bash
+./build.sh
+```
+
+This will:
+- Compile the thesis from `src/main.tex`
+- Generate `thesis.pdf` in the main directory
+- Move all build artifacts to the `build/` directory
+
+The build process includes:
+1. First pdflatex pass (creates auxiliary files)
+2. BibTeX (processes bibliography)
+3. Second pdflatex pass (resolves references)
+4. Third pdflatex pass (final formatting)
 
 ### Running Notebooks
 
@@ -121,6 +169,8 @@ Support for multiple experiments:
 - **Vectorized Calculations**: Efficient NumPy-based computations
 - **Caching System**: Automatic caching of expensive calculations
 - **Experiment Framework**: Flexible experiment configuration system
+- **Organized LaTeX Structure**: Clean separation of source files, figures, and build artifacts
+- **Automated Build System**: One-command thesis compilation
 
 ## Dependencies
 
@@ -131,6 +181,7 @@ Core dependencies include:
 - `h5py` - Data caching
 - `mpmath` - High-precision calculations
 - `yaml` - Configuration files
+- LaTeX distribution - For thesis compilation
 
 See `environment.yml` for complete dependency list.
 
@@ -144,4 +195,4 @@ For questions about the physics or code, please contact [roman.marcarelli@colora
 
 ---
 
-*This repository contains the computational framework for my PhD thesis on lepton flavor violation and new physics searches. The code implements theoretical calculations for various experimental searches and provides tools for analyzing the sensitivity of different experiments to new physics.*
+*This repository contains the computational framework and complete LaTeX document for my PhD thesis "Aspects of Charged Lepton Flavor Violation in Particle Physics". The code implements theoretical calculations for various experimental searches and provides tools for analyzing the sensitivity of different experiments to new physics.*

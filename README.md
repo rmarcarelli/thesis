@@ -1,6 +1,6 @@
-# Lepton Flavor Violation and New Physics Searches
+# Aspects of Charged Lepton Flavor Violation in High-Energy Physics
 
-This repository contains the computational framework, analysis code, and complete LaTeX document for my PhD thesis on aspects of lepton flavor violation in particle physics.
+This repository contains the computational framework, analysis code, and complete LaTeX document for my PhD thesis on aspects of charged lepton flavor violation in high-energy physics.
 
 ## Overview
 
@@ -194,4 +194,4 @@ For questions about the physics or code, please contact [roman.marcarelli@colora
 
 ---
 
-*This repository contains the computational framework and complete LaTeX document for my PhD thesis "Aspects of Charged Lepton Flavor Violation in Particle Physics". The code implements theoretical calculations for various experimental searches and provides tools for analyzing the sensitivity of different experiments to new physics.*
+*This repository contains the computational framework and complete LaTeX document for my PhD thesis "Aspects of Charged Lepton Flavor Violation in High-Energy Physics". The code implements theoretical calculations for various experimental searches and provides tools for analyzing the sensitivity of different experiments to new physics.*

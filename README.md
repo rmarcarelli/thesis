@@ -39,8 +39,7 @@ thesis/
 │   ├── chapter3/
 │   ├── chapter4/
 │   ├── chapter5/
-│   ├── chapter6/
-│   └── presentation/
+│   └── chapter6/
 ├── build/                        # Build artifacts (auto-generated)
 ├── thesis_code/                  # Main computational framework
 │   ├── phys/                     # Physics constants and utilities

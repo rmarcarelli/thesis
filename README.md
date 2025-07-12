@@ -1,2 +1,147 @@
-# thesis
-Code that reproduces (most of) the results in my thesis.
+# Lepton Flavor Violation and New Physics Searches
+
+This repository contains the computational framework and analysis code for my PhD thesis on aspects of lepton flavor violation in particle physics.
+
+## Overview
+
+This thesis explores lepton flavor violating processes and their implications for new physics beyond the Standard Model. The work includes:
+
+- **LFV Observables**: Calculations of radiative decays, trilepton decays, and dipole moments
+- **Lepton-Nucleus Collisions**: Cross section calculations for the beam-dump experiment SLAC E137, the upcoming Electron Ion Collider (EIC), a hypothetical Muon (Synchrotron)-Ion Collider (MuSIC), and a hypothetical Muon Beam Dump (MuBeD) experiment
+- **Higgs Decay Searches**: Searches for LFV ALPs in Higgs decays from CMS, ATLAS, and MATHUSLA
+- **Form Factor Calculations**: Exact and approximate form factors for LFV processes
+
+## Repository Structure
+
+```
+thesis/
+├── thesis_code/                    # Main computational framework
+│   ├── phys/                      # Physics constants and utilities
+│   ├── lfv_lepton_observables/    # LFV decay rates and dipole moments
+│   ├── lfv_higgs_decays/         # Higgs decay signal calculations
+│   ├── lepton_nucleus_collisions/ # Cross section calculations
+│   └── displaced_vectors/         # Displaced vertex analyses
+├── notebooks/                     # Jupyter notebooks for analysis
+├── figures/                       # Generated plots and figures
+├── environment.yml               # Conda environment specification
+└── README.md                     # This file
+```
+
+## Installation
+
+### Prerequisites
+
+- Python 3.8 or higher
+- Conda or Miniconda
+
+### Setup
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd thesis
+```
+
+2. Create and activate the conda environment:
+```bash
+conda env create -f environment.yml
+conda activate thesis
+```
+
+3. Install the thesis code as a package:
+```bash
+pip install -e .
+```
+
+## Usage
+
+### Running Notebooks
+
+The analysis is primarily conducted through Jupyter notebooks in the `notebooks/` directory:
+
+```bash
+jupyter lab
+# or
+jupyter notebook
+```
+
+Key notebooks include:
+- `LFV Decay Limits.ipynb` - Lepton flavor violating decay rate limits
+- `Electric and Magnetic Dipole Moment Limits.ipynb` - g-2 and EDM calculations
+- `Limits on LFV ALPs and Scalars at Lepton Nucleus Colliders.ipynb` - Collider limits on LFV scalars and ALPs
+- `Higgs ALP Decays.ipynb` - Higgs decay signal calculations
+- `Displaced Vectors at Lepton Nucleus Colliders.ipynb` - Limits on hidden vectors from displaced signals at lepton-nucleus collision experiments
+
+### Using the Code Directly
+
+```python
+import thesis_code as tc
+
+# Calculate LFV decay rates
+from tc.lfv_lepton_observables import radiative_decay_rate
+rate = radiative_decay_rate(m=100, i=0, j=1, g=[[1]*3]*3)
+
+# Calculate cross sections
+from tc.lepton_nucleus_collisions.experiments import Experiment, FinalState
+exp = Experiment.from_card('path/to/experiment.yaml')
+final_state = FinalState(*final_state_params)
+production_cross_section = exp.production_cross_section(final_state)
+```
+
+## Physics Content
+
+### Lepton Flavor Violation
+
+The code implements calculations for:
+- Radiative decays: ℓᵢ → ℓⱼγ
+- Trilepton decays: ℓᵢ → ℓⱼℓₖℓₗ
+- Magnetic dipole moments: Δaᵢ
+- Electric dipole moments: dᵢ
+
+### Form Factors
+
+Both exact and approximate form factors are implemented:
+- Exact calculations using special functions (Li₂, C₀, etc.)
+- Approximate forms valid in different mass hierarchies
+- Automatic selection of appropriate approximations
+
+### Experimental Limits
+
+Support for multiple experiments:
+- **EIC**: Electron-ion collider searches for bosons 
+- **MuSIC**: Hypothetical 1 TeV muon-ion collider experiment
+- **MuBeD**: Hypothetical 1 TeV muon beam dump experiment
+- **CMS/ATLAS**: Existing searches for prompt and displaced new physics from Higgs decays
+- **MATHUSLA**: Future surface detector for long-lived particles at CERN
+
+## Key Features
+
+- **Modular Design**: Clean separation of physics domains
+- **Comprehensive Documentation**: Detailed docstrings for all functions
+- **Vectorized Calculations**: Efficient NumPy-based computations
+- **Caching System**: Automatic caching of expensive calculations
+- **Experiment Framework**: Flexible experiment configuration system
+
+## Dependencies
+
+Core dependencies include:
+- `numpy` - Numerical computations
+- `scipy` - Special functions and optimization
+- `matplotlib` - Plotting
+- `h5py` - Data caching
+- `mpmath` - High-precision calculations
+- `yaml` - Configuration files
+
+See `environment.yml` for complete dependency list.
+
+## License
+
+This work is part of my PhD thesis. Please cite appropriately if using any of the physics calculations or results.
+
+## Contact
+
+For questions about the physics or code, please contact [roman.marcarelli@colorado.edu].
+
+---
+
+*This repository contains the computational framework for my PhD thesis on lepton flavor violation and new physics searches. The code implements theoretical calculations for various experimental searches and provides tools for analyzing the sensitivity of different experiments to new physics.*

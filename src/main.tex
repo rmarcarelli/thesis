@@ -1,0 +1,105 @@
+% !TEX TS-program = pdflatexmk
+
+\documentclass[defaultstyle,11pt]{src/styles/thesis}
+
+\usepackage{amssymb}		% to get all AMS symbols
+\usepackage{amsmath}        % extra math
+\usepackage{graphicx}		% to insert figures
+\graphicspath{{figures/}}	% set the path for figures
+\usepackage{hyperref}		% PDF hyperreferences
+\usepackage{slashed}        % Feynman slash
+\usepackage{color}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{booktabs}
+\usepackage{pifont}
+\usepackage{pdfrender}
+\usepackage[numbers,sort&compress]{natbib}
+%%%%%%%%%%%%   All the preamble material:   %%%%%%%%%%%%
+
+\title{Aspects of Charged Lepton Flavor Violation in High-Energy Physics}
+
+\author{Roman}{Marcarelli}
+
+\otherdegrees{B.A., Cornell University, 2019}
+
+\degree{Doctor of Philosophy}		%  #1 {long descr.}
+	{Ph.D., Physics}		%  #2 {short descr.}
+
+\dept{Department of}			%  #1 {designation}
+	{Physics}		%  #2 {name}
+
+\advisor{Prof.}				%  #1 {title}
+	{Ethan Neil}			%  #2 {name}
+
+\reader{Oliver DeWolfe}		%  2nd person to sign thesis
+\readerThree{Andrew Hamilton}		%  3rd person to sign thesis
+\readerFour{Anna Hasenfratz}		%  4th person to sign thesis
+\readerFive{Jamie Nagle}		%  5th person to sign thesis
+\readerSix{Keith Ulmer}		%  6th person to sign thesis
+
+\abstract{  \OnePageChapter	% because it is very short
+
+
+        Despite its abundance in extensions to the Standard Model, charged lepton flavor violation (CLFV) has never been observed. In this dissertation, we review some potential avenues for the discovery of CLFV processes. We begin by reviewing the contributions of CLFV scalars to flavor-violating lepton decays and lepton dipole moments, emphasizing their sensitivity to parity-violation (PV) and coupling hierarchies. We then discuss a production mechanism for CLFV particles which is largely independent of PV and coupling hierarchies: on-shell production in experiments involving lepton-nucleus collisions ($\ell^- A_Z\rightarrow \ell'^- A_Z \varphi$). We compare the production cross-sections for (pseudo)scalars and (axial-)vectors for a few benchmark scenarios: SLAC E137, the Electron Ion Collider (EIC), a hypothetical $1~{\rm TeV}$ muon beam dump (MuBeD), and a hypothetical $1~{\rm TeV}$ Muon (Synchrotron) Ion Collider (MuSIC). We examine the kinematical distributions of the final-state particles produced at these experiments, and discuss these in relation to detector geometry. We then apply these results to probe a particular class of CLFV scalar: leptophilic axion-like particles (ALPs). We compare these results to limits on the ALP-lepton couplings from Higgs-ALP decays at the LHC, assuming a substantial ALP-Higgs portal interaction. Finally, we explore the possibility of production and subsequent detection of massive gauge bosons for the anomaly-free $U(1)_{L_i - L_j}$ symmetries at the EIC, MuBeD, and MuSIC. We also include the analysis for a dark photon and $U(1)_{B-L}$ gauge boson, which, while not explicitly CLFV, serve as useful benchmarks for comparison. 
+	}
+
+\dedication[Dedication]{	% NEVER use \OnePageChapter here.
+	{\it To my mother.}
+	}
+
+\acknowledgements{	\OnePageChapter	% *MUST* BE ONLY ONE PAGE!
+
+I would like to thank my great$^{50\,000\,000}$ grandmother for venturing out of the big pond. My mother for fostering my curiosity about the world from a young age, and encouraging me to pursue my passions. My father for teaching me to have a positive mental attitude toward life, and whose hard work helped put me through college. My twin sister, Gabriella, my half-sister Allison, my aunts Jill, Theresa, and Joyce, my uncles Michael and Stu, and my grandpa Bob and grandma Judy, for their company and continued support over the years. 
+
+I would never have achieved this milestone were it not for my mentors and teachers in academia. I am grateful to my advisor, Ethan Neil, for guiding my research and encouraging me to pursue new topics that piqued my interest, and whose flexibility was imperative to my success. I also thank my collaborator Hooman Davoudiasl for bringing a positive perspective to each meeting and engaging in insightful physics conversations. Finally, I thank my undergraduate professor Yuval Grossman, whose infectious commitment to teaching and physics helped guide my decision to pursue a graduate degree. 
+
+It's impossible to pursue a technical degree without a strong foundation, and for that I owe my gratitude to a handful of high school teachers. I thank my physics teacher Mr. Murray for creating the math, science, and engineering program at my high school which undoubtedly contributed to my success and the success of many others, and whose notes were {\it still} useful for me when studying for the physics GRE. I also thank my math teachers Ms. Bobay, Dr. Murray, Dr. Oddi and Mrs. Patsatsia who, in addition to being excellent educators inside the classroom, stayed after-school to train mathematically curious students like myself for state and national math competitions.
+
+ I thank my long-time friend and Boulder roommate Matt, for staying by my side and making graduate school during the pandemic bearable, and his dog Layla, for providing much-needed assistance with calculations from time to time. I am also grateful to the friends I met through my program in Colorado: Curtis, Kenny, and Jake for productive and interesting physics discussions, Evan, Yifan, Peter, and Sam for pushing me to my physical limits on challenging hikes and backpacking trips, Yifan and Talal for welcome lunch and coffee breaks and weekly watch-parties, and James and Evan for teaching me how to ski.
+
+And then there are the friends who came before them: Joe, for insightful phone conversations and the occasional real-life outing. Avinash, Chau, Kenny, Kyle, and Sam, for at times engaging in helpful physics- and math-related discussions, and at other times offering a welcome means of decompression through gaming (albeit often at the expense of my sleep schedule). I also thank my friends from high school and before who contributed to my life academically and otherwise, some of whom I've kept in touch with and others whom I'd gladly reconnect with: Jeff, Jay, Aaron, Nick, Josh, Matt, Enes, Riancy, Nathan, Shreyash, Justin, and Louie.
+
+}
+
+% \IRBprotocol{E927F29.001X}	% optional!
+
+\ToCisShort	% use this only for 1-page Table of Contents
+
+\LoFisShort	% use this only for 1-page Table of Figures
+% \emptyLoF	% use this if there is no List of Figures
+
+\LoTisShort	% use this only for 1-page Table of Tables
+% \emptyLoT	% use this if there is no List of Tables
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%       BEGIN DOCUMENT...         %%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\listfiles
+
+\begin{document}
+
+\input src/macros.tex
+\input src/chapters/chapter1.tex
+\input src/chapters/chapter2.tex
+\input src/chapters/chapter3.tex
+\input src/chapters/chapter4.tex
+\input src/chapters/chapter5.tex
+\input src/chapters/chapter6.tex
+\input src/chapters/chapter7.tex
+
+%%%%%%%%%   then the Bibliography, if any   %%%%%%%%%
+\bibliographystyle{unsrtnat}	% or "siam", or "alpha", etc.
+%\nocite{*}		% list all refs in database, cited or not
+\bibliography{src/bibliography/refs}		% Bib database in "refs.bib"
+
+%%%%%%%%%   then the Appendices, if any   %%%%%%%%%
+\appendix
+\input src/appendices/appendixA.tex
+\input src/appendices/appendixB.tex
+
+
+\end{document}
+

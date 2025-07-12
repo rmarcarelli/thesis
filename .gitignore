@@ -3,3 +3,22 @@ __pycache__/
 *.pyo
 .ipynb_checkpoints
 *.h5
+
+# LaTeX build artifacts
+build/
+*.aux
+*.log
+*.bbl
+*.blg
+*.toc
+*.lof
+*.lot
+*.out
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+*.pdf
+
+# macOS metadata files
+._*
+.DS_Store

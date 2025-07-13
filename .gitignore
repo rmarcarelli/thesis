@@ -17,7 +17,6 @@ build/
 *.synctex.gz
 *.fdb_latexmk
 *.fls
-*.pdf
 
 # macOS metadata files
 ._*

@@ -92,7 +92,7 @@ def EIC_limit(masses,
     idx : tuple, optional
         Coupling indices to constrain (default: (0, 2) for g_{e tau})
     g : array-like, optional
-        Coupling matrix hierarchy (default: [[1]*3]*3)
+        Coupling hierarchy matrix (default: [[1]*3]*3)
     th : array-like, optional
         PV angle matrix (default: [[0]*3]*3)
     ALP : bool, optional
@@ -189,7 +189,7 @@ def MuSIC_limit(masses,
     idx : tuple, optional
         Coupling indices to constrain (default: (1, 2) for g_{mu tau})
     g : array-like, optional
-        Coupling matrix hierarchy (default: [[1]*3]*3)
+        Coupling hierarchy matrix (default: [[1]*3]*3)
     th : array-like, optional
         PV angle matrix (default: [[0]*3]*3)
     ALP : bool, optional
@@ -283,7 +283,7 @@ def MuBeD_limit(masses,
     idx : tuple, optional
         Coupling indices to constrain (default: (1, 2))
     g : array-like, optional
-        Coupling matrix hierarchy (default: [[1]*3]*3)
+        Coupling hierarchy matrix (default: [[1]*3]*3)
     th : array-like, optional
         PV angle matrix (default: [[0]*3]*3)
     ALP : bool, optional

@@ -65,7 +65,7 @@ def radiative_decay_limit(m, process, idx, g = None, th = [[0]*3]*3, d = [[0]*3]
     idx : tuple
         Indices (i, j, k, l) specifying which couplings to constrain
     g : array-like, optional
-        Coupling matrix (if None, uses unit couplings for specified indices)
+        Coupling hierarchy matrix (if None, assumes g[idx] is the only non-zero coupling).
     th : array-like, optional
         PV angles for couplings
     d : array-like, optional
@@ -150,7 +150,7 @@ def trilepton_decay_limit(m, process, idx, g = None, th = [[0]*3]*3, d = [[0]*3]
     idx : tuple
         Indices (i, j, k, l) specifying which couplings to constrain
     g : array-like, optional
-        Coupling matrix (if None, uses unit couplings for specified indices)
+        Coupling hierarchy matrix (if None, assumes g[idx] is the only non-zero coupling).
     th : array-like, optional
         PV angles for couplings
     d : array-like, optional
@@ -235,9 +235,9 @@ def magnetic_dipole_moment_limit(m, i, idx, g = None, th = [[0]*3]*3, d = [[0]*3
     i : int
         Index of lepton (0=e, 1=μ, 2=τ)
     idx : tuple
-        Indices (i, j) specifying which couplings to constrain
+        Indices (i, j) specifying which coupling to constrain
     g : array-like, optional
-        Coupling matrix (if None, uses unit couplings for specified indices)
+        Coupling hierarchy matrix (if None, assumes g[idx] is the only non-zero coupling).
     th : array-like, optional
         PV angles for couplings
     d : array-like, optional
@@ -294,9 +294,9 @@ def electric_dipole_moment_limit(m, i, idx, g = None, th = [[0]*3]*3, d = [[0]*3
     i : int
         Index of lepton (0=e, 1=μ, 2=τ)
     idx : tuple
-        Indices (i, j) specifying which couplings to constrain
+        Indices (i, j) specifying which coupling to constrain
     g : array-like, optional
-        Coupling matrix (if None, uses unit couplings for specified indices)
+        Coupling hierarchy matrix (if None, assumes g[idx] is the only non-zero coupling).
     th : array-like, optional
         PV angles for couplings
     d : array-like, optional
@@ -354,9 +354,9 @@ def g_2_explanation(m, which_anomaly, idx, g = None, th = [[0]*3]*3, d = [[0]*3]
     which_anomaly : str
         Which anomaly to explain: 'e Rb', 'e Cs', or 'mu'
     idx : tuple
-        Indices (i, j) specifying which couplings to vary
+        Indices (i, j) specifying which coupling to vary
     g : array-like, optional
-        Coupling matrix (if None, uses unit couplings for specified indices)
+        Coupling hierarchy matrix (if None, assumes g[idx] is the only non-zero coupling).
     th : array-like, optional
         PV angles for couplings
     d : array-like, optional

@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "thesis_code"
+version = "0.1.0"
+description = "Computational framework for aspects of charged lepton flavor violation in high-energy physics."
+authors = [
+    { name = "Roman Marcarelli" }
+]
+requires-python = ">=3.7" 

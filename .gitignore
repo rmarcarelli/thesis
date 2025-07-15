@@ -21,3 +21,4 @@ build/
 # macOS metadata files
 ._*
 .DS_Store
+*.egg-info/

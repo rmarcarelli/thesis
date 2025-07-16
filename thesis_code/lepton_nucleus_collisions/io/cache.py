@@ -12,6 +12,7 @@ import numpy as np
 import h5py
 from functools import lru_cache
 from scipy.interpolate import RegularGridInterpolator
+import os
 
 def cache_exists(experiment, final_state, key):
     """
@@ -65,6 +66,9 @@ def cache_data(experiment, final_state, key, data):
         for k, d in zip(key, data):
             cache_data(experiment, final_state, k, d)
     else:
+        # Ensure the cache directory exists before writing
+        os.makedirs(os.path.dirname(experiment.FILE_PATH), exist_ok=True)
+        
         # If PV_angle is None, then data is essentially a tuple
         # with the PC and PV component as the first and second 
         # components, so saving an individual final state is 
